@@ -2,6 +2,15 @@
   text-align: center;
 }
 
+.orders-mainTitle {
+  background-color: #2490e2;
+  margin-top: 0;
+  padding: 10px;
+  color: white;
+  display: flex;
+  font-weight: bold;
+}
+
 .orders-graphs {
   display: flex;
   flex-wrap: wrap;

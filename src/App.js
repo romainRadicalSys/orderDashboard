@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
@@ -90,8 +90,8 @@ const OrderTable = (props) => {
 }
 
 
-// Main Component used to displays the Dashboard components Tables and Graphs 
-// I've used Tab to seperates the different sections
+// Main Component used to display the User Dashboard components Tables and Graphs 
+// I've used Tab to separates the different sections
 // The library react-tabs is used to display the tabs sections
 const OrdersData = () => {
 
@@ -119,8 +119,8 @@ const OrdersData = () => {
 	}
 
 	return (
-		<div>
-			<h1>Dashboard</h1>
+		<div className='wrapper'>
+			<h1 className='orders-mainTitle'>Sales Orders Dashboard</h1>
 			<Tabs>
 				<TabList>
 					<Tab>sOrders</Tab>
