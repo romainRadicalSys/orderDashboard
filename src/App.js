@@ -10,18 +10,24 @@ import { XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, VerticalB
 
 import './App.css';
 
-const SalesList = () => {
-	const [sOrders, setsOrders] = useState([]);
-	const [pOrders, setpOrders] = useState([]);
-	const [invoices, setinvoices] = useState([]);
-	const [openOrder, setopenOrder] = useState(0);
-	const [closeOrder, setCloseOrder] = useState(0);
+const OrdersList = () => {
+	//Set States
+
+	const [sOrders, setsOrders] = useState([]); //sOrders
+	const [pOrders, setpOrders] = useState([]); //pOrders
+	const [invoice, setinvoices] = useState([]); //Invoices
+	const [openOrder, setopenOrder] = useState(0); //Open Orders for sOrders
+	const [closeOrder, setCloseOrder] = useState(0); //Close Orders for sOrders
+	const [openpOrder, setopenpOrder] = useState(0); //Open Orders for pOrders
+	const [closepOrder, setClosepOrder] = useState(0); //Close Orders for pOrders
+	const [openInvoices, setopenInvoices] = useState(0); //Open Orders for Invoices
+	const [closeInvoice, setCloseInvoices] = useState(0); //Close Orders for Invoices
 
 	Axios.get('./mocks/orders.json')
 		.then(res => {
 			const sOrder = res.data.orders.sOrders.data;
 			const pOrder = res.data.orders.pOrders.data;
-			const invoices = res.data.orders.pOrders.data;
+			const invoices = res.data.orders.invoices.data;
 			//sOrders data
 			setsOrders(sOrder);
 			//pOrders data
@@ -29,8 +35,17 @@ const SalesList = () => {
 			//invoices data
 			setinvoices(invoices);
 
+			//Counting sOrder Open/close
 			setopenOrder(sOrders.filter(obj => obj.openFlag === 'F').length);
 			setCloseOrder(sOrders.filter(obj => obj.openFlag === 'T').length);
+
+			//Counting pOrder Open/close
+			setopenpOrder(pOrders.filter(obj => obj.openFlag === 'F').length);
+			setClosepOrder(pOrders.filter(obj => obj.openFlag === 'T').length);
+
+			//Counting invoices Open/close
+			setopenInvoices(invoice.filter(obj => obj.openFlag === 'F').length);
+			setCloseInvoices(invoice.filter(obj => obj.openFlag === 'T').length);
 		})
 		.catch(err => {
 			console.log(err);
@@ -90,7 +105,9 @@ const SalesList = () => {
 		}
 	];
 
-	const dataGraph = [{ x: 'Open Orders', y: openOrder }, { x: 'Closed Orders', y: closeOrder }];
+	const dataGraphOrders = [{ x: 'Open Orders', y: openOrder }, { x: 'Closed Orders', y: closeOrder }];
+	const dataGraphOrderp = [{ x: 'Open Orders', y: openpOrder }, { x: 'Closed Orders', y: closepOrder }];
+	const dataGraphInvoices = [{ x: 'Open Orders', y: openInvoices }, { x: 'Closed Orders', y: closeInvoice }];
 
 	return (
 		<div>
@@ -110,17 +127,31 @@ const SalesList = () => {
 					<ReactTable data={pOrders} columns={columns} filterable />
 				</TabPanel>
 				<TabPanel>
-					<ReactTable data={invoices} columns={columns} filterable />
+					<ReactTable data={invoice} columns={columns} filterable />
 				</TabPanel>
 				<TabPanel>
-					<p>Open:{openOrder}</p>
-					<p>Close: {closeOrder}</p>
+					<p>Open:{openpOrder}</p>
+					<p>Close: {closepOrder}</p>
 					<XYPlot margin={{ bottom: 70 }} xType="ordinal" width={300} height={300}>
 						<VerticalGridLines />
 						<HorizontalGridLines />
 						<XAxis tickLabelAngle={-45} />
 						<YAxis />
-						<VerticalBarSeries data={dataGraph} />
+						<VerticalBarSeries data={dataGraphOrders} />
+					</XYPlot>
+					<XYPlot margin={{ bottom: 70 }} xType="ordinal" width={300} height={300}>
+						<VerticalGridLines />
+						<HorizontalGridLines />
+						<XAxis tickLabelAngle={-45} />
+						<YAxis />
+						<VerticalBarSeries data={dataGraphOrderp} />
+					</XYPlot>
+					<XYPlot margin={{ bottom: 70 }} xType="ordinal" width={300} height={300}>
+						<VerticalGridLines />
+						<HorizontalGridLines />
+						<XAxis tickLabelAngle={-45} />
+						<YAxis />
+						<VerticalBarSeries data={dataGraphInvoices} />
 					</XYPlot>
 				</TabPanel>
 			</Tabs>
@@ -131,7 +162,7 @@ const SalesList = () => {
 function App() {
 	return (
 		<div className="App">
-			<SalesList />
+			<OrdersList />
 		</div>
 	);
 }
